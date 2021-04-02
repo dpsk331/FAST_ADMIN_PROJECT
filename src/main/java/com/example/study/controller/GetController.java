@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api") // Localhost:8080/api
 public class GetController {
 
+    // ▼ GetMapping과 다른 점은 파라미터를 가져오지 못한다는 것!
     @RequestMapping(method = RequestMethod.GET, path = "/getMethod") // Localhost:8080/api/getMethod
     public String getRequest() {
         return "Hi getMethod";
