@@ -18,7 +18,10 @@ dependencies {
 
     // Lombok Gradle Build
     compile 'org.projectlombok:lombok:1.18.10'
-    annotationProcessor 'org.projectlombok:1.18.10'
+
+    // JPA
+    compile 'org.springframework.boot:spring-boot-starter-data-jpa'
+    compile 'mysql:mysql-connector-java'
 }
 
 test {
