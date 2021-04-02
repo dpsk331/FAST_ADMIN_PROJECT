@@ -7,6 +7,7 @@ import javax.persistence.*;
 import java.time.LocalDateTime;
 
 @Data
+// @AllArgsConstructor
 @Entity // 이 클래스가 Entity임을 명시
 // @Table(name = "user") // 자바 클래스의 이름과 DB 테이블의 이름이 동일하다면 명시할 필요 X, 자동 매칭됨!
 public class User {
