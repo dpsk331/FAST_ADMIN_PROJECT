@@ -6,7 +6,7 @@ public class SearchParam {
     private String email;
     private int page;
 
-    // 스프링부트에서 jackson 라이브러리를 통해 JSON 형태인 {"account" : "","email" : "","page" :0} 와 같이 변경하려 반환
+    // 스프링부트에서 jackson 라이브러리를 통해 JSON 형태인 {"account" : "","email" : "","page" :0} 와 같이 변경하려 반환!
 
     public String getAccount() {
         return account;
