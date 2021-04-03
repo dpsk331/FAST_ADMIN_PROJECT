@@ -30,11 +30,11 @@ public class UserRepositoryTest extends StudyApplicationTests {
         User user = new User(); // DI X
 
         // user.setId(); // DB에서 AI 이기 때문에 필요X
-        user.setAccount("TestUser02");
-        user.setEmail("TestUser02@gmail.com");
-        user.setPhoneNumber("010-1111-2222");
-        user.setCreateAt(LocalDateTime.now());
-        user.setCreateBy("TestUser02");
+        user.setAccount("TestUser01");
+        user.setEmail("TestUser01@gmail.com");
+        user.setPhoneNumber("010-1111-1111");
+        user.setCreatedAt(LocalDateTime.now());
+        user.setCreatedBy("TestUser01");
 
         User newUser = userRepository.save(user);
         System.out.println("newUser : " + newUser);

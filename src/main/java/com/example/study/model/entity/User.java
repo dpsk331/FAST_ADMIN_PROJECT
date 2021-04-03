@@ -22,8 +22,8 @@ public class User {
     private String account;
     private String email;
     private String phoneNumber;
-    private LocalDateTime createAt;
-    private String createBy;
+    private LocalDateTime createdAt;
+    private String createdBy;
     private LocalDateTime updatedAt;
     private String updatedBy;
 
