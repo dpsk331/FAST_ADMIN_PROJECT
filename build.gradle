@@ -17,7 +17,8 @@ dependencies {
     testImplementation 'org.springframework.boot:spring-boot-starter-test'
 
     // Lombok Gradle Build
-    compile 'org.projectlombok:lombok:1.18.10'
+    compile 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok' // Getter, Setter을 인식하지 못해서 작성한 구문
 
     // JPA
     compile 'org.springframework.boot:spring-boot-starter-data-jpa'
