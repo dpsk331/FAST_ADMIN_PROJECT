@@ -44,7 +44,9 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Test
     @Transactional
     public void read() {
-        Optional<User> user = userRepository.findById(7L); // 특정 데이터 Select
+
+        // select * from user where = id ?;
+        Optional<User> user = userRepository.findByAccount("TestUser01"); // 특정 데이터 Select
 
          user.ifPresent(selectUser -> { // user가 존재할 경우!
              selectUser.getOrderDetailList().stream().forEach(detail -> {
