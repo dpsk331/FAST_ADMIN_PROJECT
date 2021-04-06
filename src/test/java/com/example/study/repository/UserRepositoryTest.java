@@ -1,14 +1,12 @@
 package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
-import com.example.study.model.entity.Item;
 import com.example.study.model.entity.User;
 import org.junit.jupiter.api.Assertions;
+
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.DeleteMapping;
-import org.springframework.web.bind.annotation.RequestParam;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -25,35 +23,39 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
     @Test
     public void create() {
-        // JPA의 장점은 Object를 가지고 데이터베이스를 관리할 수 있도록 도와주는 툴
-        // String sql = insert into user (%s, %s, $d) value (account, email, age); XXX
 
-        User user = new User(); // DI X
+        String account = "Test01";
+        String password = "Test01";
+        String status = "REGISTERED";
+        String email = "Test01@gmail.com";
+        String phoneNumber = "010-1111-1111";
+        LocalDateTime registeredAt = LocalDateTime.now();
+        LocalDateTime createdAt = LocalDateTime.now();
+        String createdBy = "AdminServer";
 
-        // user.setId(); // DB에서 AI 이기 때문에 필요X
-        user.setAccount("TestUser01");
-        user.setEmail("TestUser01@gmail.com");
-        user.setPhoneNumber("010-1111-1111");
-        user.setCreatedAt(LocalDateTime.now());
-        user.setCreatedBy("TestUser01");
+        User user = new User();
+        user.setAccount(account);
+        user.setPassword(password);
+        user.setStatus(status);
+        user.setEmail(email);
+        user.setPhoneNumber(phoneNumber);
+        user.setRegisteredAt(registeredAt);
+        user.setCreatedAt(createdAt);
+        user.setCreatedBy(createdBy);
 
         User newUser = userRepository.save(user);
-        System.out.println("newUser : " + newUser);
+
+        Assertions.assertNotNull(newUser);
+
     }
 
     @Test
     @Transactional
     public void read() {
 
-        // select * from user where = id ?;
-        Optional<User> user = userRepository.findByAccount("TestUser01"); // 특정 데이터 Select
+        User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-1111");
+        Assertions.assertNotNull(user);
 
-         user.ifPresent(selectUser -> { // user가 존재할 경우!
-             selectUser.getOrderDetailList().stream().forEach(detail -> {
-                 Item item = detail.getItem();
-                 System.out.println(item);
-             });
-         });
     }
 
     @Test
