@@ -1,6 +1,5 @@
 package com.example.study.model.entity;
 
-import jdk.vm.ci.meta.Local;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
