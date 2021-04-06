@@ -21,15 +21,25 @@ public class User {
 
     // @Column(name = "account") // 위의 @Table 애노테이션과 같이 변수명과 컬럼명이 동일하다면 명시할 필요X, 자동 매칭됨!
     private String account;
-    private String email;
-    private String phoneNumber;
-    private LocalDateTime createdAt;
-    private String createdBy;
-    private LocalDateTime updatedAt;
-    private String updatedBy;
 
-    // 1 : N
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user") // OrderDetail의 user라는 변수에 매핑
-    private List<OrderDetail> orderDetailList;
+    private String password;
+
+    private String status;
+
+    private String email;
+
+    private String phoneNumber;
+
+    private LocalDateTime registeredAt;
+
+    private LocalDateTime unregisteredAt;
+
+    private LocalDateTime createdAt;
+
+    private String createdBy;
+
+    private LocalDateTime updatedAt;
+
+    private String updatedBy;
 
 }
