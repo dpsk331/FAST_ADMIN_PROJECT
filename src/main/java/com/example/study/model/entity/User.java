@@ -3,14 +3,17 @@ package com.example.study.model.entity;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.ToString;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
 @Entity // 이 클래스가 Entity임을 명시
+@ToString(exclude = {"orderGroupList"})
 // @Table(name = "user") // 자바 클래스의 이름과 DB 테이블의 이름이 동일하다면 명시할 필요 X, 자동 매칭됨!
 public class User {
 
@@ -40,5 +43,10 @@ public class User {
     private LocalDateTime updatedAt;
 
     private String updatedBy;
+
+    // User 1 : N OrderGroup
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "user")
+    private List<OrderGroup> orderGroupList;
+
 
 }
