@@ -31,4 +31,5 @@ public class OrderDetailRepositoryTest extends StudyApplicationTests {
         Assertions.assertNotNull(newOrderDetail);
 
     }
+
 }
