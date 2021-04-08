@@ -61,14 +61,6 @@ public class UserRepositoryTest extends StudyApplicationTests {
 
         User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-1111");
 
-        // @Accessors(chain = true) 사용 시 체인 패턴
-        user.setEmail("")
-            .setPhoneNumber("")
-            .setStatus("");
-
-        User u = new User().setAccount("").setEmail("").setPassword("");
-
-
         if(user != null) {
             user.getOrderGroupList().stream().forEach(orderGroup -> {
                 System.out.println("-----------장바구니------------");
