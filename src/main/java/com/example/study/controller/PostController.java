@@ -20,4 +20,14 @@ public class PostController {
         return searchParam;
     }
 
+    @PutMapping("/putMethod")
+    public void put() {
+
+    }
+
+    @PatchMapping("/patchMethod")
+    public void patch() {
+
+    }
+
 }

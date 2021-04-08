@@ -30,4 +30,5 @@ public class AdminUserRepositoryTest extends StudyApplicationTests {
         newAdminUser.setAccount("CHANGE");
         adminUserRepository.save(newAdminUser);
     }
+
 }

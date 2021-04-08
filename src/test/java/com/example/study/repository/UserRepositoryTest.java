@@ -33,21 +33,23 @@ public class UserRepositoryTest extends StudyApplicationTests {
         LocalDateTime createdAt = LocalDateTime.now();
         String createdBy = "AdminServer";
 
-        /*User user = new User();
+        /* User user = new User();
         user.setAccount(account);
         user.setPassword(password);
         user.setStatus(status);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
-        user.setRegisteredAt(registeredAt);*/
+        user.setRegisteredAt(registeredAt); */
 
         // @Builder 사용
-        User user = User.builder().
-                    account(account).
-                    password(password).
-                    status(status).
-                    email(email).
-                    build();
+        User user = User.builder()
+                        .account(account)
+                        .password(password)
+                        .status(status)
+                        .email(email)
+                        .phoneNumber(phoneNumber)
+                        .registeredAt(registeredAt)
+                        .build();
 
         User newUser = userRepository.save(user);
 

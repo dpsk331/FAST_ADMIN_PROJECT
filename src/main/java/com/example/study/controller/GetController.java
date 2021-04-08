@@ -1,6 +1,7 @@
 package com.example.study.controller;
 
 import com.example.study.model.SearchParam;
+import com.example.study.model.network.Header;
 import org.springframework.web.bind.annotation.*;
 
 // ▼ 컴파일러에게 이곳을 컨트롤러로 사용한다고 알리는 애노테이션
@@ -35,6 +36,13 @@ public class GetController {
 
         // {"account" : "","email" : "","page" : 0}
         return searchParam;
+    }
+
+    @GetMapping("/header")
+    public Header getHeader() {
+
+        // { "resultCode" : "OK", "description" : "OK" }
+        return Header.builder().resultCode("OK").description("OK").build();
     }
 
 }
