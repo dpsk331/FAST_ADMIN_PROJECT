@@ -24,24 +24,30 @@ public class UserRepositoryTest extends StudyApplicationTests {
     @Test
     public void create() {
 
-        String account = "Test01";
-        String password = "Test01";
+        String account = "Test02";
+        String password = "Test02";
         String status = "REGISTERED";
-        String email = "Test01@gmail.com";
-        String phoneNumber = "010-1111-1111";
+        String email = "Test02@gmail.com";
+        String phoneNumber = "010-1111-2222";
         LocalDateTime registeredAt = LocalDateTime.now();
         LocalDateTime createdAt = LocalDateTime.now();
         String createdBy = "AdminServer";
 
-        User user = new User();
+        /*User user = new User();
         user.setAccount(account);
         user.setPassword(password);
         user.setStatus(status);
         user.setEmail(email);
         user.setPhoneNumber(phoneNumber);
-        user.setRegisteredAt(registeredAt);
-        user.setCreatedAt(createdAt);
-        user.setCreatedBy(createdBy);
+        user.setRegisteredAt(registeredAt);*/
+
+        // @Builder 사용
+        User user = User.builder().
+                    account(account).
+                    password(password).
+                    status(status).
+                    email(email).
+                    build();
 
         User newUser = userRepository.save(user);
 
@@ -54,6 +60,14 @@ public class UserRepositoryTest extends StudyApplicationTests {
     public void read() {
 
         User user = userRepository.findFirstByPhoneNumberOrderByIdDesc("010-1111-1111");
+
+        // @Accessors(chain = true) 사용 시 체인 패턴
+        user.setEmail("")
+            .setPhoneNumber("")
+            .setStatus("");
+
+        User u = new User().setAccount("").setEmail("").setPassword("");
+
 
         if(user != null) {
             user.getOrderGroupList().stream().forEach(orderGroup -> {
