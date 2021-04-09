@@ -23,9 +23,9 @@ public class UserApiResponse {
 
     private String email;
 
-    private  String phobeNumber;
+    private  String phoneNumber;
 
-    private LocalDateTime resisteredAt;
+    private LocalDateTime registeredAt;
 
-    private LocalDateTime unresisteredAt;
+    private LocalDateTime unregisteredAt;
 }

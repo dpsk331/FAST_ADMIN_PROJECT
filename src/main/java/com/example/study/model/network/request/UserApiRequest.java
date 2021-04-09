@@ -4,9 +4,8 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.boot.autoconfigure.flyway.FlywayDataSource;
 
-@FlywayDataSource
+@Data
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
