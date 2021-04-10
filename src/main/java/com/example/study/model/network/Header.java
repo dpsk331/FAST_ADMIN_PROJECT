@@ -42,6 +42,7 @@ public class Header<T> {
                 .transactionTime(LocalDateTime.now())
                 .resultCode("OK")
                 .description("OK")
+                .data(data)
                 .build();
     }
 

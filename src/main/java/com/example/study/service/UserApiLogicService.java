@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.Optional;
 
 @Service
 public class UserApiLogicService implements CrudInterface<UserApiRequest, UserApiResponse> {
@@ -45,12 +46,47 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
 
     @Override
     public Header<UserApiResponse> read(Long id) {
-        return null;
+        /*
+        // id -> repository getOne, getById
+        Optional<User> optional = userRepository.findById(id);
+
+        // user -> userApiResponse return
+        return optional
+                .map(user -> response(user)) // map : 다른 return 형태로 바꾸는 것
+                .orElseGet(() -> Header.ERROR("데이터 없음'")); // user가 없는 경우
+        */
+
+        // ▼ 위의 코드를 간단하게 한 경우
+        return userRepository.findById(id)
+                .map(user -> response(user))
+                .orElseGet(() -> Header.ERROR("데이터 없음'"));
     }
 
     @Override
     public Header<UserApiResponse> update(Header<UserApiRequest> request) {
-        return null;
+
+        // 1. data 가져오기
+        UserApiRequest userApiRequest = request.getData();
+
+        // 2. id를 가지고 user 데이터 찾기
+        Optional<User> optional = userRepository.findById(userApiRequest.getId());
+
+        // 3. update
+        // 4. userApiResponse
+        return optional.map(user -> {
+            user.setAccount(userApiRequest.getAccount())
+                    .setPassword(userApiRequest.getPassword())
+                    .setStatus(userApiRequest.getStatus())
+                    .setPassword(userApiRequest.getPassword())
+                    .setEmail(userApiRequest.getEmail())
+                    .setRegisteredAt(userApiRequest.getRegisteredAt())
+                    .setUnregisteredAt(userApiRequest.getUnregisteredAt());
+            return user;
+        })
+                .map(user -> userRepository.save(user))     // update -> updateUser
+                .map(updateUser -> response(updateUser))    // userApiResponse
+                .orElseGet(() -> Header.ERROR("데이터 없음"));
+
     }
 
     @Override
