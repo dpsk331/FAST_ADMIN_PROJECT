@@ -34,7 +34,7 @@ public class OrderDetailApiController implements CrudInterface<OrderDetailApiReq
     }
 
     @Override
-    @DeleteMapping("{is}")
+    @DeleteMapping("{id}")
     public Header delete(@PathVariable Long id) {
         return orderDetailApiLogicService.delete(id);
     }

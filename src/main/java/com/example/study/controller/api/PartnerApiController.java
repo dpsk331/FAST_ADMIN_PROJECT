@@ -16,13 +16,13 @@ public class PartnerApiController implements CrudInterface<PartnerApiRequest, Pa
     private PartnerApiLogicService partnerApiLogicService;
 
     @Override
-    @PostMapping("{id}")
+    @PostMapping("")
     public Header<PartnerApiResponse> create(@RequestBody  Header<PartnerApiRequest> request) {
         return partnerApiLogicService.create(request);
     }
 
     @Override
-    @GetMapping("")
+    @GetMapping("{id}")
     public Header<PartnerApiResponse> read(@PathVariable Long id) {
         return partnerApiLogicService.read(id);
     }
