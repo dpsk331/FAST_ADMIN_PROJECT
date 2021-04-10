@@ -3,7 +3,7 @@ package com.example.study.service;
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.OrderDetail;
 import com.example.study.model.network.Header;
-import com.example.study.model.network.request.OrderDetailRequest;
+import com.example.study.model.network.request.OrderDetailApiRequest;
 import com.example.study.model.network.response.OrderDetailResponse;
 import com.example.study.repository.ItemRepository;
 import com.example.study.repository.OrderDetailRepository;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class OrderDetailApiLogicService implements CrudInterface<OrderDetailRequest, OrderDetailResponse> {
+public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiRequest, OrderDetailResponse> {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
@@ -26,9 +26,9 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailRequ
     private OrderGroupRepository orderGroupRepository;
 
     @Override
-    public Header<OrderDetailResponse> create(Header<OrderDetailRequest> request) {
+    public Header<OrderDetailResponse> create(Header<OrderDetailApiRequest> request) {
 
-        OrderDetailRequest body = request.getData();
+        OrderDetailApiRequest body = request.getData();
 
         OrderDetail orderDetail = OrderDetail.builder()
                 .status(body.getStatus())
@@ -52,9 +52,9 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailRequ
     }
 
     @Override
-    public Header<OrderDetailResponse> update(Header<OrderDetailRequest> request) {
+    public Header<OrderDetailResponse> update(Header<OrderDetailApiRequest> request) {
 
-        OrderDetailRequest body = request.getData();
+        OrderDetailApiRequest body = request.getData();
 
         return orderDetailRepository.findById(body.getId())
                 .map(orderDetail -> {

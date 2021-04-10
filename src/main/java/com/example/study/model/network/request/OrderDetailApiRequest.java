@@ -13,7 +13,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDetailRequest {
+public class OrderDetailApiRequest {
 
     private Long id;
 
