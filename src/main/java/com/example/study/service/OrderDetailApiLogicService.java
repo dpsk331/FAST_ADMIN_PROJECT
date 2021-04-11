@@ -1,6 +1,7 @@
 package com.example.study.service;
 
 import com.example.study.model.entity.OrderDetail;
+import com.example.study.model.enumclass.OrderDetailStatus;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.OrderDetailApiRequest;
 import com.example.study.model.network.response.OrderDetailApiResponse;
@@ -26,7 +27,7 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
         OrderDetailApiRequest body = request.getData();
 
         OrderDetail orderDetail = OrderDetail.builder()
-                .status(body.getStatus())
+                .status(String.valueOf(body.getStatus()))
                 .arrivalDate(LocalDateTime.now().plusDays(2))
                 .quantity(body.getQuantity())
                 .totalPrice(body.getTotalPrice())
@@ -54,7 +55,7 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
         return baseRepository.findById(body.getId())
                 .map(orderDetail -> {
                     orderDetail
-                            .setStatus(body.getStatus())
+                            .setStatus(String.valueOf(body.getStatus()))
                             .setArrivalDate(body.getArrivalDate())
                             .setQuantity(body.getQuantity())
                             .setTotalPrice(body.getTotalPrice())
@@ -81,7 +82,7 @@ public class OrderDetailApiLogicService extends BaseService<OrderDetailApiReques
 
         OrderDetailApiResponse body = OrderDetailApiResponse.builder()
                 .id(orderDetail.getId())
-                .status(orderDetail.getStatus())
+                .status(OrderDetailStatus.valueOf(orderDetail.getStatus()))
                 .arrivalDate(orderDetail.getArrivalDate())
                 .quantity(orderDetail.getQuantity())
                 .totalPrice(orderDetail.getTotalPrice())

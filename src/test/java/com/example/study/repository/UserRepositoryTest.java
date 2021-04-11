@@ -2,6 +2,7 @@ package com.example.study.repository;
 
 import com.example.study.StudyApplicationTests;
 import com.example.study.model.entity.User;
+import com.example.study.model.enumclass.UserStatus;
 import org.junit.jupiter.api.Assertions;
 
 import org.junit.jupiter.api.Test;
@@ -14,34 +15,20 @@ import java.util.Optional;
 public class UserRepositoryTest extends StudyApplicationTests {
 
     // ▼ Dependency Injection(DI) : 의존성 주입
-    // - 객체를 직접 만들지 않고, 스프링이 객체 직접 관리 및 의존성 주입
-    // - 스프링의 가장 큰 장점 중 하나
-    // - 디자인 패턴
-    // - 싱글턴 패턴
     @Autowired
     private UserRepository userRepository;
 
     @Test
     public void create() {
-
         String account = "Test02";
         String password = "Test02";
-        String status = "REGISTERED";
+        UserStatus status = UserStatus.REGISTERED;
         String email = "Test02@gmail.com";
         String phoneNumber = "010-1111-2222";
         LocalDateTime registeredAt = LocalDateTime.now();
         LocalDateTime createdAt = LocalDateTime.now();
         String createdBy = "AdminServer";
 
-        /* User user = new User();
-        user.setAccount(account);
-        user.setPassword(password);
-        user.setStatus(status);
-        user.setEmail(email);
-        user.setPhoneNumber(phoneNumber);
-        user.setRegisteredAt(registeredAt); */
-
-        // @Builder 사용
         User user = User.builder()
                         .account(account)
                         .password(password)
