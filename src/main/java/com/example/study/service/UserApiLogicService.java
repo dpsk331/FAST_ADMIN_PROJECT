@@ -1,17 +1,28 @@
 package com.example.study.service;
 
+import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.User;
 import com.example.study.model.enumclass.UserStatus;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.UserApiRequest;
 import com.example.study.model.network.response.UserApiResponse;
+import com.example.study.repository.UserRepository;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDateTime;
+import java.util.List;
 import java.util.Optional;
+import java.util.stream.Collectors;
 
 @Service
-public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResponse, User> {
+public class UserApiLogicService implements CrudInterface<UserApiRequest, UserApiResponse> {
+
+    @Autowired
+    private UserRepository userRepository;
 
     // 1. request data
     // 2. user 생성
@@ -32,28 +43,19 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .registeredAt(LocalDateTime.now())
                 .build();
 
-        User newUser = baseRepository.save(user);
+        User newUser = userRepository.save(user);
 
         // 3. 생성된 데이터 기준으로 UserApiResponse 생성 후 return
         // 해당 부분은 read나 update 부분에서도 사용할 수 있기 때문에 바깥에 작성
-        return response(newUser);
+        return Header.OK((response(newUser)));
     }
 
     @Override
     public Header<UserApiResponse> read(Long id) {
-        /*
-        // id -> repository getOne, getById
-        Optional<User> optional = userRepository.findById(id);
-
-        // user -> userApiResponse return
-        return optional
-                .map(user -> response(user)) // map : 다른 return 형태로 바꾸는 것
-                .orElseGet(() -> Header.ERROR("데이터 없음'")); // user가 없는 경우
-        */
-
-        // ▼ 위의 코드를 간단하게 한 경우
-        return baseRepository.findById(id)
+        return userRepository.findById(id)
                 .map(user -> response(user))
+                // .map(userApiResponse -> Header.OK(userApiResponse))
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음'"));
     }
 
@@ -64,7 +66,7 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
         UserApiRequest userApiRequest = request.getData();
 
         // 2. id를 가지고 user 데이터 찾기
-        Optional<User> optional = baseRepository.findById(userApiRequest.getId());
+        Optional<User> optional = userRepository.findById(userApiRequest.getId());
 
         // 3. update
         // 4. userApiResponse
@@ -78,8 +80,9 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                     .setUnregisteredAt(userApiRequest.getUnregisteredAt());
             return user;
         })
-                .map(user -> baseRepository.save(user))     // update -> updateUser
+                .map(user -> userRepository.save(user))     // update -> updateUser
                 .map(updateUser -> response(updateUser))    // userApiResponse
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -87,19 +90,19 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
     @Override
     public Header delete(Long id) {
         // 1. id를 가지고 repository를 통해서 user 찾기
-        Optional<User> optional = baseRepository.findById(id);
+        Optional<User> optional = userRepository.findById(id);
 
         // 2. repository를 통해서 delete
         // 3. responser return
         return optional.map(user -> {
-            baseRepository.delete(user);
+            userRepository.delete(user);
             return Header.OK();
         })
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
 
-    private Header<UserApiResponse> response(User user) {
+    private UserApiResponse response(User user) {
         // user -> userApiResponse
 
         UserApiResponse userApiResponse = UserApiResponse.builder()
@@ -113,9 +116,27 @@ public class UserApiLogicService extends BaseService<UserApiRequest, UserApiResp
                 .unregisteredAt(user.getUnregisteredAt())
                 .build();
 
-        // Header + data return
-
-        return Header.OK(userApiResponse);
+        return userApiResponse;
     }
 
+    public Header<List<UserApiResponse>> search(Pageable pageable) {
+        Page<User> users = userRepository.findAll(pageable);
+
+        List<UserApiResponse> userApiResponseList = users.stream()
+                .map(user -> response(user))
+                .collect(Collectors.toList());
+
+        // List<UserApiResponse>
+        // Header<List<UserApiResponse>>
+
+        Pagination pagination = Pagination.builder()
+                .totalPages(users.getTotalPages())
+                .totalElements(users.getTotalElements())
+                .currentPage(users.getNumber())
+                .currentElements(users.getNumberOfElements())
+                .build();
+
+        return Header.OK(userApiResponseList, pagination);
+
+    }
 }

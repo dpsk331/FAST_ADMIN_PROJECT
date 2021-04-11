@@ -27,6 +27,8 @@ public class Header<T> {
     // 항상 변화하는 데이터 부분(body)는 제너릭 타입으로 선언
     private T data;
 
+    private Pagination pagination;
+
     // 정상적인 호출 OK
     public static <T> Header<T> OK() {
         return (Header<T>)Header.builder()
@@ -43,6 +45,17 @@ public class Header<T> {
                 .resultCode("OK")
                 .description("OK")
                 .data(data)
+                .build();
+    }
+
+    // DATA OK
+    public static <T> Header<T> OK(T data, Pagination pagination) {
+        return (Header<T>)Header.builder()
+                .transactionTime(LocalDateTime.now())
+                .resultCode("OK")
+                .description("OK")
+                .data(data)
+                .pagination(pagination)
                 .build();
     }
 

@@ -1,15 +1,23 @@
 package com.example.study.service;
 
+import com.example.study.ifs.CrudInterface;
+import com.example.study.model.entity.OrderDetail;
 import com.example.study.model.entity.Partner;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.PartnerApiRequest;
 import com.example.study.model.network.response.PartnerApiResponse;
 import com.example.study.repository.CategoryRepository;
+import com.example.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import javax.servlet.http.Part;
+
 @Service
-public class PartnerApiLogicService extends BaseService<PartnerApiRequest, PartnerApiResponse, Partner> {
+public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
+
+    @Autowired
+    private PartnerRepository partnerRepository;
 
     @Autowired
     private CategoryRepository categoryRepository;
@@ -28,10 +36,9 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
                 .businessNumber(body.getPartnerNumber())
                 .ceoName(body.getCeoName())
                 .registeredAt(body.getRegisteredAt())
-                .category(categoryRepository.getOne(body.getCategoryId()))
                 .build();
 
-        Partner newPartner = baseRepository.save(partner);
+        Partner newPartner = partnerRepository.save(partner);
 
         return response(newPartner);
     }
@@ -39,7 +46,7 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
     @Override
     public Header<PartnerApiResponse> read(Long id) {
 
-        return baseRepository.findById(id)
+        return partnerRepository.findById(id)
                 .map(partner -> response(partner))
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
@@ -50,7 +57,7 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
 
         PartnerApiRequest body = request.getData();
 
-        return baseRepository.findById(body.getId())
+        return partnerRepository.findById(body.getId())
                 .map(partner -> {
                     partner
                             .setName(body.getName())
@@ -64,7 +71,7 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
                             .setUnregisteredAt(body.getUnregisteredAt());
                     return partner;
                 })
-                .map(changePartner -> baseRepository.save(changePartner))
+                .map(changePartner -> partnerRepository.save(changePartner))
                 .map(this::response)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
@@ -73,9 +80,9 @@ public class PartnerApiLogicService extends BaseService<PartnerApiRequest, Partn
     @Override
     public Header delete(Long id) {
 
-        return baseRepository.findById(id)
+        return partnerRepository.findById(id)
                 .map(partner -> {
-                    baseRepository.delete(partner);
+                    partnerRepository.delete(partner);
                     return Header.OK();
                 })
                 .orElseGet(() -> Header.ERROR("데이터 없음"));

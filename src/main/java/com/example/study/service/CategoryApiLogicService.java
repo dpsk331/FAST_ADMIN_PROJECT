@@ -1,13 +1,19 @@
 package com.example.study.service;
 
+import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.Category;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.CategoryApiRequest;
 import com.example.study.model.network.response.CategoryApiResponse;
+import com.example.study.repository.CategoryRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 @Service
-public class CategoryApiLogicService extends BaseService<CategoryApiRequest, CategoryApiResponse, Category> {
+public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest, CategoryApiResponse> {
+
+    @Autowired
+    private CategoryRepository categoryRepository;
 
     @Override
     public Header<CategoryApiResponse> create(Header<CategoryApiRequest> request) {
@@ -19,13 +25,13 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
                 .title(body.getTitle())
                 .build();
 
-        Category newCategory = baseRepository.save(category);
+        Category newCategory = categoryRepository.save(category);
         return response(newCategory);
     }
 
     @Override
     public Header<CategoryApiResponse> read(Long id) {
-        return baseRepository.findById(id)
+        return categoryRepository.findById(id)
                 .map(category -> response(category))
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
@@ -35,14 +41,14 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 
         CategoryApiRequest body = request.getData();
 
-        return baseRepository.findById(body.getId())
+        return categoryRepository.findById(body.getId())
                 .map(category -> {
                     category
                             .setType(body.getType())
                             .setTitle(body.getTitle());
                     return category;
                 })
-                .map(newCategory -> baseRepository.save(newCategory))
+                .map(newCategory -> categoryRepository.save(newCategory))
                 .map(this::response)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
@@ -50,9 +56,9 @@ public class CategoryApiLogicService extends BaseService<CategoryApiRequest, Cat
 
     @Override
     public Header delete(Long id) {
-        return baseRepository.findById(id)
+        return categoryRepository.findById(id)
                 .map(category -> {
-                    baseRepository.delete(category);
+                    categoryRepository.delete(category);
                     return Header.OK();
                 })
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
