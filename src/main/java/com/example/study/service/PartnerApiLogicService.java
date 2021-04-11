@@ -1,17 +1,20 @@
 package com.example.study.service;
 
 import com.example.study.ifs.CrudInterface;
-import com.example.study.model.entity.OrderDetail;
 import com.example.study.model.entity.Partner;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.PartnerApiRequest;
 import com.example.study.model.network.response.PartnerApiResponse;
 import com.example.study.repository.CategoryRepository;
 import com.example.study.repository.PartnerRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
-import javax.servlet.http.Part;
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
@@ -40,7 +43,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 
         Partner newPartner = partnerRepository.save(partner);
 
-        return response(newPartner);
+        return Header.OK(response(newPartner));
     }
 
     @Override
@@ -48,6 +51,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 
         return partnerRepository.findById(id)
                 .map(partner -> response(partner))
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -73,6 +77,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                 })
                 .map(changePartner -> partnerRepository.save(changePartner))
                 .map(this::response)
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -89,7 +94,7 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
 
     }
 
-    private Header<PartnerApiResponse> response(Partner partner) {
+    private PartnerApiResponse response(Partner partner) {
 
         PartnerApiResponse partnerApiResponse = PartnerApiResponse.builder()
                 .id(partner.getId())
@@ -104,7 +109,25 @@ public class PartnerApiLogicService implements CrudInterface<PartnerApiRequest, 
                 .unregisteredAt(partner.getUnregisteredAt())
                 .build();
 
-        return Header.OK(partnerApiResponse);
+        return partnerApiResponse;
+
+    }
+
+    public Header<List<PartnerApiResponse>> search(Pageable pageable) {
+        Page<Partner> partners = partnerRepository.findAll(pageable);
+
+        List<PartnerApiResponse> partnerApiResponseList = partners.stream()
+                .map(partner -> response(partner))
+                .collect(Collectors.toList());
+
+        Pagination pagination = Pagination.builder()
+                .totalPages(partners.getTotalPages())
+                .totalElements(partners.getTotalElements())
+                .currentPage(partners.getNumber())
+                .currentElements(partners.getNumberOfElements())
+                .build();
+
+        return Header.OK(partnerApiResponseList, pagination);
 
     }
 }

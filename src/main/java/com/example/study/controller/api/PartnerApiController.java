@@ -5,15 +5,28 @@ import com.example.study.model.network.Header;
 import com.example.study.model.network.request.PartnerApiRequest;
 import com.example.study.model.network.response.PartnerApiResponse;
 import com.example.study.service.PartnerApiLogicService;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.List;
+
+@Slf4j
 @RestController
 @RequestMapping("api/partner")
 public class PartnerApiController implements CrudInterface<PartnerApiRequest, PartnerApiResponse> {
 
     @Autowired
     private PartnerApiLogicService partnerApiLogicService;
+
+    @GetMapping("")
+    public Header<List<PartnerApiResponse>> search(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = 15) Pageable pageable) {
+        log.info("{}", pageable);
+        return partnerApiLogicService.search(pageable);
+    }
 
     @Override
     @PostMapping("")

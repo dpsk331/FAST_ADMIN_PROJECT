@@ -137,6 +137,5 @@ public class UserApiLogicService implements CrudInterface<UserApiRequest, UserAp
                 .build();
 
         return Header.OK(userApiResponseList, pagination);
-
     }
 }

@@ -3,11 +3,18 @@ package com.example.study.service;
 import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.Category;
 import com.example.study.model.network.Header;
+import com.example.study.model.network.Pagination;
 import com.example.study.model.network.request.CategoryApiRequest;
 import com.example.study.model.network.response.CategoryApiResponse;
+import com.example.study.model.network.response.OrderGroupApiResponse;
 import com.example.study.repository.CategoryRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
+
+import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest, CategoryApiResponse> {
@@ -26,13 +33,14 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
                 .build();
 
         Category newCategory = categoryRepository.save(category);
-        return response(newCategory);
+        return Header.OK(response(newCategory));
     }
 
     @Override
     public Header<CategoryApiResponse> read(Long id) {
         return categoryRepository.findById(id)
                 .map(category -> response(category))
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
@@ -50,6 +58,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
                 })
                 .map(newCategory -> categoryRepository.save(newCategory))
                 .map(this::response)
+                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -64,7 +73,7 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
-    private Header<CategoryApiResponse> response(Category category) {
+    private CategoryApiResponse response(Category category) {
 
         CategoryApiResponse body = CategoryApiResponse.builder()
                 .id(category.getId())
@@ -72,7 +81,24 @@ public class CategoryApiLogicService implements CrudInterface<CategoryApiRequest
                 .title(category.getTitle())
                 .build();
 
-        return Header.OK(body);
+        return body;
 
+    }
+
+    public Header<List<CategoryApiResponse>> search(Pageable pageable) {
+        Page<Category> categories = categoryRepository.findAll(pageable);
+
+        List<CategoryApiResponse> categoryApiResponseList = categories.stream()
+                .map(category -> response(category))
+                .collect(Collectors.toList());
+
+        Pagination pagination = Pagination.builder()
+                .totalPages(categories.getTotalPages())
+                .totalElements(categories.getTotalElements())
+                .currentPage(categories.getNumber())
+                .currentElements(categories.getNumberOfElements())
+                .build();
+
+        return Header.OK(categoryApiResponseList, pagination);
     }
 }
