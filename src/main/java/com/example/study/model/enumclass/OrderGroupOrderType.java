@@ -5,11 +5,10 @@ import lombok.Getter;
 
 @Getter
 @AllArgsConstructor
-public enum ItemStatus {
+public enum OrderGroupOrderType {
 
-    REGISTERED(0, "등록", "상품 등록 상태"),
-    UNREGISTERED(1, "해지", "상품 해지 상태"),
-    WAITING(2, "검수", "상품 검수 상태")
+    ALL(0, "일괄 발송", "모든 상품을 일괄 발송"),
+    EACH(1, "개별 발송", "모든 상품을 준비되는대로 개별 발송")
     ;
 
     private Integer id;

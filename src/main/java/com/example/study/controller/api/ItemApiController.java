@@ -13,30 +13,30 @@ import org.springframework.web.bind.annotation.*;
 public class ItemApiController implements CrudInterface<ItemApiRequest, ItemApiResponse> {
 
     @Autowired
-    private ItemApiLogicService itemApiLogicServicel;
+    private ItemApiLogicService itemApiLogicService;
 
     @Override
     @PostMapping("")         // /api/item
     public Header<ItemApiResponse> create(@RequestBody Header<ItemApiRequest> request) {
-        return itemApiLogicServicel.create(request);
+        return itemApiLogicService.create(request);
     }
 
     @Override
     @GetMapping("{id}")      // /api/item/id
     public Header<ItemApiResponse> read(@PathVariable Long id) {
-        return itemApiLogicServicel.read(id);
+        return itemApiLogicService.read(id);
     }
 
     @Override
     @PutMapping("")          // api/item
     public Header<ItemApiResponse> update(@RequestBody Header<ItemApiRequest> request) {
-        return itemApiLogicServicel.update(request);
+        return itemApiLogicService.update(request);
     }
 
     @Override
     @DeleteMapping("{id}")   // /api/item/id
     public Header delete(@PathVariable Long id) {
-        return itemApiLogicServicel.delete(id);
+        return itemApiLogicService.delete(id);
     }
 
 }

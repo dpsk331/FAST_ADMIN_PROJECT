@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 @Builder
-public class OrderDetailResponse {
+public class OrderDetailApiResponse {
 
     private Long id;
 

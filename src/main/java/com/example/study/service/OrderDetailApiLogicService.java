@@ -4,7 +4,7 @@ import com.example.study.ifs.CrudInterface;
 import com.example.study.model.entity.OrderDetail;
 import com.example.study.model.network.Header;
 import com.example.study.model.network.request.OrderDetailApiRequest;
-import com.example.study.model.network.response.OrderDetailResponse;
+import com.example.study.model.network.response.OrderDetailApiResponse;
 import com.example.study.repository.ItemRepository;
 import com.example.study.repository.OrderDetailRepository;
 import com.example.study.repository.OrderGroupRepository;
@@ -14,7 +14,7 @@ import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 
 @Service
-public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiRequest, OrderDetailResponse> {
+public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiRequest, OrderDetailApiResponse> {
 
     @Autowired
     private OrderDetailRepository orderDetailRepository;
@@ -26,7 +26,7 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
     private OrderGroupRepository orderGroupRepository;
 
     @Override
-    public Header<OrderDetailResponse> create(Header<OrderDetailApiRequest> request) {
+    public Header<OrderDetailApiResponse> create(Header<OrderDetailApiRequest> request) {
 
         OrderDetailApiRequest body = request.getData();
 
@@ -45,14 +45,14 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
     }
 
     @Override
-    public Header<OrderDetailResponse> read(Long id) {
+    public Header<OrderDetailApiResponse> read(Long id) {
         return orderDetailRepository.findById(id)
-                .map(this::response)
+                .map(orderDetail -> response(orderDetail))
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
     @Override
-    public Header<OrderDetailResponse> update(Header<OrderDetailApiRequest> request) {
+    public Header<OrderDetailApiResponse> update(Header<OrderDetailApiRequest> request) {
 
         OrderDetailApiRequest body = request.getData();
 
@@ -82,9 +82,9 @@ public class OrderDetailApiLogicService implements CrudInterface<OrderDetailApiR
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
     }
 
-    private Header<OrderDetailResponse> response(OrderDetail orderDetail) {
+    private Header<OrderDetailApiResponse> response(OrderDetail orderDetail) {
 
-        OrderDetailResponse body = OrderDetailResponse.builder()
+        OrderDetailApiResponse body = OrderDetailApiResponse.builder()
                 .id(orderDetail.getId())
                 .status(orderDetail.getStatus())
                 .arrivalDate(orderDetail.getArrivalDate())
