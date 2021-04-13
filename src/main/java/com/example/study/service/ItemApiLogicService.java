@@ -96,7 +96,7 @@ public class ItemApiLogicService implements CrudInterface<ItemApiRequest, ItemAp
 
     }
 
-    private ItemApiResponse response(Item item){
+    public ItemApiResponse response(Item item){
 
         ItemApiResponse body = ItemApiResponse.builder()
                 .id(item.getId())

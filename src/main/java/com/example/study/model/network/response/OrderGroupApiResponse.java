@@ -8,10 +8,12 @@ import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
+import javax.persistence.Entity;
 import javax.persistence.EnumType;
 import javax.persistence.Enumerated;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Data
 @AllArgsConstructor
@@ -43,5 +45,7 @@ public class OrderGroupApiResponse {
     private LocalDateTime arrivalDate;
 
     private Long userId;
+
+    private List<ItemApiResponse> itemApiResponseList;
 
 }
