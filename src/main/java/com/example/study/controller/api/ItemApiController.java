@@ -28,11 +28,11 @@ public class ItemApiController implements CrudInterface<ItemApiRequest, ItemApiR
     @Autowired
     private ItemApiLogicService itemApiLogicServicel;
 
-    @GetMapping("")
+    /*@GetMapping("")
     public Header<List<ItemApiResponse>> search(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = 15) Pageable pageable) {
         log.info("{}", pageable);
         return itemApiLogicServicel.search(pageable);
-    }
+    }*/
 
     @Override
     @PostMapping("")         // /api/item

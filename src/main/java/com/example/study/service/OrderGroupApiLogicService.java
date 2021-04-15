@@ -45,7 +45,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 
         OrderGroup newOrderGroup = orderGroupRepository.save(orderGroup);
 
-        return Header.OK(response(newOrderGroup));
+        return response(newOrderGroup);
     }
 
     @Override
@@ -53,7 +53,6 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 
         return orderGroupRepository.findById(id)
                 .map(this::response) // this = 현재 클래스
-                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -81,7 +80,6 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
                 })
                 .map(changeOrderGroup -> orderGroupRepository.save(changeOrderGroup))
                 .map(this::response)
-                .map(Header::OK)
                 .orElseGet(() -> Header.ERROR("데이터 없음"));
 
     }
@@ -98,7 +96,7 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
 
     }
 
-    public OrderGroupApiResponse response(OrderGroup orderGroup) {
+    public Header<OrderGroupApiResponse> response(OrderGroup orderGroup) {
 
         OrderGroupApiResponse body = OrderGroupApiResponse.builder()
                 .id(orderGroup.getId())
@@ -114,10 +112,10 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
                 .userId(orderGroup.getUser().getId())
                 .build();
 
-        return  body;
+        return  Header.OK(body);
     }
 
-    public Header<List<OrderGroupApiResponse>> search(Pageable pageable) {
+    /*public Header<List<OrderGroupApiResponse>> search(Pageable pageable) {
         Page<OrderGroup> orderGroups = orderGroupRepository.findAll(pageable);
 
         List<OrderGroupApiResponse> orderGroupApiResponseList = orderGroups.stream()
@@ -132,5 +130,5 @@ public class OrderGroupApiLogicService implements CrudInterface<OrderGroupApiReq
                 .build();
 
         return Header.OK(orderGroupApiResponseList, pagination);
-    }
+    }*/
 }

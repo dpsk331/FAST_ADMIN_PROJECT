@@ -22,11 +22,11 @@ public class OrderGroupApiController implements CrudInterface<OrderGroupApiReque
     @Autowired
     private OrderGroupApiLogicService orderGroupApiLogicService;
 
-    @GetMapping("")
+    /*@GetMapping("")
     public Header<List<OrderGroupApiResponse>> search(@PageableDefault(sort = "id", direction = Sort.Direction.ASC, size = 15) Pageable pageable) {
         log.info("{}", pageable);
         return orderGroupApiLogicService.search(pageable);
-    }
+    }*/
 
     @Override
     @PostMapping("")
